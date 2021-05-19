@@ -1,0 +1,29 @@
+{
+  "name": "open-homework",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "env-cmd --no-override next dev",
+    "build": "env-cmd --no-override next build",
+    "start": "env-cmd --no-override next start",
+    "docker:build": "docker build . -t open-homework",
+    "docker:start:beta": "docker run  --name open-homework-beta  -d -p 8000:3000 open-homework "
+  },
+  "dependencies": {
+    "@emotion/react": "^11.4.0",
+    "@emotion/styled": "^11.3.0",
+    "@material-ui/core": "^5.0.0-alpha.33",
+    "@material-ui/lab": "^5.0.0-alpha.33",
+    "axios": "^0.21.1",
+    "axios-logger": "^2.5.0",
+    "clipboard": "^2.0.8",
+    "dateformat": "^4.5.1",
+    "next": "10.1.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-query": "^3.13.12"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
+  }
+}
