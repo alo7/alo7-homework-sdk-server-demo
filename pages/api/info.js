@@ -8,10 +8,16 @@ import * as AxiosLogger from "axios-logger";
  * @param res {NextApiResponse}
  */
 export default async (req, res) => {
-  const { role, openId } = req.query;
+  const { role, openId, thirdPartyClazzIds } = req.query;
   const axios = Axios.create();
-  axios.interceptors.request.use(AxiosLogger.requestLogger,AxiosLogger.errorLogger);
-  axios.interceptors.response.use(AxiosLogger.responseLogger,AxiosLogger.errorLogger);
+  axios.interceptors.request.use(
+    AxiosLogger.requestLogger,
+    AxiosLogger.errorLogger
+  );
+  axios.interceptors.response.use(
+    AxiosLogger.responseLogger,
+    AxiosLogger.errorLogger
+  );
   try {
     const {
       data: { token },
@@ -45,7 +51,12 @@ export default async (req, res) => {
         },
       } = await axios.get(
         `${process.env.TEACHER_API}/api/v1/h5url/homeworks/assignment`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
+        {
+          params: { thirdPartyClazzIds },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       res
         .status(200)

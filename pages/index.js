@@ -19,6 +19,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
+  MenuItem,
+  Box,
 } from "@material-ui/core";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 
@@ -150,11 +153,13 @@ const Result = ({ data }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "10px" }}>
       {data.previewUrl && (
-        <Button>
-          <a href={data.previewUrl} target="__blank">
-            点击打开老师布置
-          </a>
-        </Button>
+        <>
+          <Button>
+            <a href={data.previewUrl} target="__blank">
+              点击打开老师布置
+            </a>
+          </Button>
+        </>
       )}
 
       <Button data-clipboard-target="#accessToken" className="btn">
@@ -227,12 +232,13 @@ function Home() {
   const [role, setRole] = useState("teacher");
   const [openId, setOpenId] = useState("");
   const [enabled, setEnable] = useState(false);
+  const [thirdPartyClazzIds, setThirdPartyClazzIds] = useState("");
 
   const { data, isFetching, isSuccess, isError, error } = useQuery(
     "ss",
     async () => {
       return await axios.get("/api/info", {
-        params: { role, openId },
+        params: { role, openId,thirdPartyClazzIds },
       });
     },
     {
@@ -255,44 +261,56 @@ function Home() {
 
       <UserInfo setOpenId={setOpenId} setRole={setRole} />
 
-      <div>
+      <Box width="100%">
         <h3>用户信息（必填）：</h3>
-        <div>
-          <label>填入用户openid：</label>
-          <input
-            id="userOpenid"
-            type="text"
-            value={openId}
+        <Box display="flex" flexDirection="column" width="100%">
+          <TextField
             onChange={(e) => setOpenId(e.target.value)}
+            value={openId}
+            id="userOpenid"
+            label="填入用户openid"
           />
-        </div>
-        <div>
-          <label>选择用户类型：</label>
-          <select
+          <TextField
             id="userType"
+            select
+            label="选择用户类型"
+            value={role}
             onChange={(e) => {
               setRole(e.target.value);
             }}
-            value={role}
           >
-            <option value="student">学生</option>
-            <option value="teacher">老师</option>
-          </select>
-        </div>
-        <LoadingButton
-          loading={isFetching}
-          loadingIndicator="Loading"
-          onClick={() => {
-            if (openId) {
-              setEnable(true);
-            } else {
-              alert("参数错误");
-            }
-          }}
-        >
-          查询
-        </LoadingButton>
-      </div>
+            {[
+              { value: "student", label: "学生" },
+              { value: "teacher", label: "老师" },
+            ].map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            label="(可选) 请输入thirdPartyClazzIds,逗号分隔"
+            onChange={(e) => setThirdPartyClazzIds(e.target.value)}
+            value={thirdPartyClazzIds}
+            id="thirdPartyClazzIds"
+          />
+
+          <LoadingButton
+            loading={isFetching}
+            loadingIndicator="Loading"
+            onClick={() => {
+              if (openId) {
+                setEnable(true);
+              } else {
+                alert("参数错误");
+              }
+            }}
+          >
+            查询
+          </LoadingButton>
+        </Box>
+      </Box>
       {isSuccess && <Result data={data.data} />}
       {isError && <textarea>{JSON.stringify(error)}</textarea>}
     </div>
