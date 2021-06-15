@@ -7,7 +7,7 @@
     "build": "env-cmd --no-override next build",
     "start": "env-cmd --no-override next start",
     "docker:build": "docker build . -t open-homework",
-    "docker:start:beta": "docker run  --name open-homework-beta  -d -p 8000:3000 open-homework ",
+    "docker:start:beta": "docker run  --env-file ./.env --name open-homework-beta  -d -p 8000:3000 open-homework ",
     "docker:start:production": "docker run --env-file ./.env --name open-homework-prod  -d -p 8002:3000 open-homework "
   },
   "dependencies": {
