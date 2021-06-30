@@ -11,12 +11,12 @@ export default async (req, res) => {
   const { role, openId, thirdPartyClazzIds } = req.query;
   const axios = Axios.create();
   axios.interceptors.request.use(
-    AxiosLogger.requestLogger,
-    AxiosLogger.errorLogger
+    (req) => AxiosLogger.requestLogger(req, { headers: true }),
+    (req) => AxiosLogger.errorLogger(req, { headers: true })
   );
   axios.interceptors.response.use(
-    AxiosLogger.responseLogger,
-    AxiosLogger.errorLogger
+    (req) => AxiosLogger.responseLogger(req, { headers: true }),
+    (req) => AxiosLogger.errorLogger(req, { headers: true })
   );
   try {
     const {
